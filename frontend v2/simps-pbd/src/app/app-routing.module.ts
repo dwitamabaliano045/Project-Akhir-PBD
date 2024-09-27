@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { LaporanResolverService } from './pages/laporan/services/laporan-resolver.service';
 
 const routes: Routes = [
   {
@@ -26,6 +27,16 @@ const routes: Routes = [
     path: 'laporan',
     loadChildren: () =>
       import('./pages/laporan/laporan.module').then((m) => m.LaporanPageModule),
+  },
+  {
+    path: 'user',
+    loadChildren: () =>
+      import('./pages/user/user.module').then((m) => m.UserPageModule),
+  },
+  {
+    path: 'utils',
+    loadChildren: () =>
+      import('./pages/utils/utils.module').then((m) => m.UtilsPageModule),
   },
 ];
 

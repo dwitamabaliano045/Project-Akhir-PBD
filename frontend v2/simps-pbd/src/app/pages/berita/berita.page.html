@@ -1,23 +1,47 @@
 
-<ion-content class="ion-padding">
-  <h1>Berita</h1>
- 
+<ion-content class="ion-padding"
+  scroll-y="true">
+
+  <h1>Berita</h1> 
   <section>
-    <ion-grid fixed="true">
-      <ion-row *ngFor="let berita of [1,2,3,4,5,6,7,8,9,10]">
-        <ion-col>
-          <ion-card>
-            <ion-img src="https://source.unsplash.com/random/480x180/?girl"></ion-img>
-          </ion-card>
-        </ion-col>
-        <ion-col>
-          <ion-card>
-            <ion-img src="https://source.unsplash.com/random/480X180/?girlfriends"></ion-img>
-          </ion-card>
-        </ion-col>
+    <ion-grid>
+      <ion-row class="ion-align-items-center">
+
+        <ng-container *ngIf="(loading$ | async); else cardBerita" >
+          <ion-col *ngFor="let i of [1,2]" >
+            <ion-card >
+              <ion-skeleton-text style="height: 200px;" animated></ion-skeleton-text>
+              <ion-card-header>
+                <ion-skeleton-text style="height: 24px; width: 200px;" animated></ion-skeleton-text>
+                <ion-skeleton-text animated style="width: 100px;"></ion-skeleton-text>
+              </ion-card-header>
+              <ion-card-content >
+                <ion-skeleton-text style="width: 300px;" animated></ion-skeleton-text>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ng-container>
+
+
+
+        <ng-template #cardBerita>
+          <ion-col class="ion-justify-content-center"
+            *ngFor="let berita of (berita$ | async)">
+
+            <app-news-card [dataBerita]="berita"></app-news-card>
+
+          </ion-col>
+        </ng-template>
       </ion-row>
     </ion-grid>
   </section>
+  <ion-infinite-scroll threshold="100px"
+    (ionInfinite)="loadBerita($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading berita...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 
 

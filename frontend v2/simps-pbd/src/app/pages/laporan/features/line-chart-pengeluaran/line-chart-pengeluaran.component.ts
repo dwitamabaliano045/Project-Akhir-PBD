@@ -1,6 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartEvent, ChartType } from 'chart.js';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { BaseChartDirective } from 'ng2-charts';
+import { LaporanService } from 'src/app/core/services/laporan.service';
+import { LaporanInterface } from 'src/app/core/interfaces/laporan.interface';
 
 @Component({
   selector: 'app-line-chart-pengeluaran',
@@ -9,20 +14,11 @@ import { BaseChartDirective } from 'ng2-charts';
 })
 export class LineChartPengeluaranComponent {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
   public lineChartType: ChartType = 'line';
-  private datasource: Array<number> = [...Array(31).keys()] as Array<number>;
+  public chartAspectRatioY$!: Observable<number>;
 
-  public lineChartData: ChartConfiguration['data'] = {
-    datasets: [
-      {
-        data: this.datasource,
-        label: 'Bulan Mei',
-        fill: 'origin',
-      },
-    ],
-    labels: [...Array(31).keys()],
-  };
-
+  public lineChartData!: ChartConfiguration['data'];
   public lineChartOptions: ChartConfiguration['options'] = {
     elements: {
       line: {
@@ -47,7 +43,9 @@ export class LineChartPengeluaranComponent {
     },
   };
 
-  constructor() {
-    this.datasource.forEach((el: number) => el * 12000);
+  constructor(private breakpointObserver: BreakpointObserver) {
+    this.chartAspectRatioY$ = this.breakpointObserver
+      .observe([Breakpoints.HandsetPortrait])
+      .pipe(map(({ matches }) => (matches ? 2 : 1)));
   }
 }

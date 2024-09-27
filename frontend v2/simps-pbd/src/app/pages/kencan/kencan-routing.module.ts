@@ -6,8 +6,22 @@ import { KencanPage } from './kencan.page';
 const routes: Routes = [
   {
     path: '',
-    component: KencanPage
-  }
+    component: KencanPage,
+  },
+  {
+    path: 'create-kencan/:pasanganId',
+    loadChildren: () =>
+      import('./features/kencan-create/kencan-create.module').then(
+        (m) => m.KencanCreatePageModule
+      ),
+  },
+  {
+    path: ':kencanId',
+    loadChildren: () =>
+      import('./features/kencan-detail-page/kencan-detail.module').then(
+        (m) => m.KencanDetailPageModule
+      ),
+  },
 ];
 
 @NgModule({
